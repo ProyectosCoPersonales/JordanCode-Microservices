@@ -1,6 +1,7 @@
 package com.ShoppingCartService.Service;
 
 import com.ShoppingCartService.Model.Cart;
+import com.ShoppingCartService.dto.CartDTO;
 import com.ShoppingCartService.http.Response.CartItemResponse;
 import com.ShoppingCartService.http.Response.CartResponse;
 
@@ -10,4 +11,5 @@ public interface ShoppingCartService {
     Cart findCartByUser(String userName);
     String RemoveCart(Long idUser);
     CartResponse removeCartItem(Long idUser, Long idProduct);
+    CartDTO sendCartData(String userName);
 }

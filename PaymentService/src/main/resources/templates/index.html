@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <i data-lucide="paypal" class="paypal-icon"></i>
+            <h1>PayPal Checkout</h1>
+        </div>
+        <form method="post" action="/payment/create" class="mt-5 card p-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="user-info">
+                        <h2>User Information</h2>
+                        <p><strong>Name:</strong> <span th:text="${order.userName}"></span></p>
+                        <p><strong>Email:</strong> <span th:text="${order.userEmail}"></span></p>
+                    </div>
+                    <h2>Payment Details</h2>
+                </div>
+                <div class="card-content">
+                    <div class="form-group">
+                        <label for="method">Payment Method</label>
+                        <div class="payment-method">
+                            <i data-lucide="paypal" class="paypal-icon"></i>
+                            <span>PayPal</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" name="amount" th:value="${order.totalAmount}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency</label>
+                        <select id="currency" name="currency">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" name="description" th:value="'Order #' + ${order.id}">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Order Details - #<span th:text="${order.id}"></span></h2>
+                </div>
+                <div class="card-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${order.items}">
+                                <td th:text="${item.productId}"></td>
+                                <td th:text="${item.productName}"></td>
+                                <td th:text="${item.quantity}"></td>
+                                <td th:text="${item.totalPrice}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <i data-lucide="credit-card" class="credit-card-icon"></i>
+                    Secure Payment Powered by PayPal
+                </div>
+            </div>
+
+            <div class="payment-button-container">
+                <button type="submit" id="paymentButton" class="payment-button">
+                    Pay <span th:text="'$' + ${order.totalAmount}"></span> Now
+                </button>
+            </div>
+        </form>
+
+        <div id="message" class="message"></div>
+    </div>
+</body>
+</html>

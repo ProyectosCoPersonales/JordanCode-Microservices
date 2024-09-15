@@ -1,6 +1,8 @@
 package com.ShoppingCartService.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,6 +11,8 @@ import com.ShoppingCartService.Client.UserClient;
 import com.ShoppingCartService.Model.Cart;
 import com.ShoppingCartService.Model.CartItem;
 import com.ShoppingCartService.Repository.CartRepository;
+import com.ShoppingCartService.dto.CartDTO;
+import com.ShoppingCartService.dto.CartItemDTO;
 import com.ShoppingCartService.dto.ProductDTO;
 import com.ShoppingCartService.dto.UserDTO;
 import com.ShoppingCartService.http.Response.CartItemResponse;
@@ -29,7 +33,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public Cart findCartByUser(String userName) {
         return cartRepository.findByUserName(userName);
     }
-
+    
     @Override
     public CartItemResponse CreateCartItem(Long idProduct, Integer quantity) {
         ProductDTO product = productClient.getProductById(idProduct);
@@ -130,5 +134,25 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .total(cart.getTotal())
                 .build();
     }
+
+    @Override
+    public CartDTO sendCartData(String userName) {
+        Cart cart = findCartByUser(userName);
+        List<CartItemDTO> cartItemDTOs = cart.getCartItems().stream()
+        .map(item -> CartItemDTO.builder()
+                .productId(item.getProductId())
+                .quantity(item.getQuantity())
+                .unitPrice(item.getUnitPrice())
+                .build())
+        .collect(Collectors.toList());
+        return CartDTO.builder()
+            .id(cart.getId())
+            .userName(cart.getUserName())
+            .total(cart.getTotal())
+            .cartItems(cartItemDTOs)
+            .build();
+    }
+
+    
 
 }
