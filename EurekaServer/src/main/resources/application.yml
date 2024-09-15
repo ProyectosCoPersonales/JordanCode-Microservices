@@ -1,0 +1,24 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: EurekaServer
+  cloud:
+    config:
+      uri: http://localhost:8888
+      fail-fast: true 
+      retry:
+        initial-interval: 1000  
+        max-attempts: 6 
+        multiplier: 1.5 
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false  # Este servicio (Eureka Server) no se registra a sí mismo
+    fetch-registry: false  # No es necesario que el servidor de Eureka obtenga su propio registro
+    service-url:
+      defaultZone: http://localhost:${server.port}/eureka/
+
