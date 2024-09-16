@@ -4,8 +4,6 @@ import com.ShoppingCartService.Model.Cart;
 import com.ShoppingCartService.Service.ShoppingCartService;
 import com.ShoppingCartService.dto.CartDTO;
 import com.ShoppingCartService.http.Request.CartItemRequest;
-import com.ShoppingCartService.http.Request.UserRequest;
-import com.ShoppingCartService.http.Response.CartItemResponse;
 import com.ShoppingCartService.http.Response.CartResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +22,6 @@ public class ShoppingCartController {
         return ResponseEntity.ok(cart);
     }
 
-    @PostMapping("/item")
-    public ResponseEntity<CartItemResponse> createCartItem(@RequestBody CartItemRequest cartItemRequest) {
-        CartItemResponse cartItemResponse = shoppingCartService.CreateCartItem(cartItemRequest.getIdProduct(), cartItemRequest.getQuantity());
-        return ResponseEntity.ok(cartItemResponse);
-    }
-
     @PostMapping("/add")
     public ResponseEntity<CartResponse> addCartItem(@RequestBody CartItemRequest cartItemRequest) {
         CartResponse cartResponse = shoppingCartService.AddCartItem(cartItemRequest.getIdUser(), cartItemRequest.getIdProduct(), cartItemRequest.getQuantity());
@@ -37,9 +29,9 @@ public class ShoppingCartController {
     }
 
 
-    @DeleteMapping("/remove")
-    public ResponseEntity<String> removeCart(@RequestBody UserRequest userRequest) {
-        String result = shoppingCartService.RemoveCart(userRequest.getIdUser());
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<String> removeCart(@RequestParam Long idUser) {
+        String result = shoppingCartService.RemoveCart(idUser);
         return ResponseEntity.ok(result);
     }
 

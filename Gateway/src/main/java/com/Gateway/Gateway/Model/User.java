@@ -37,7 +37,6 @@ public class User {
     private String address;
     @Column(nullable = true)
     private String phone;
-
     @PrePersist
     public void setRegistrationDate() {
         this.registrationDate = LocalDateTime.now().toString();

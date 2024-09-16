@@ -62,10 +62,11 @@ public class AuthController {
 
     @PostMapping("/signing")
     public ResponseEntity<AuthResponse> signing(@RequestBody LoginRequest LoginRequest) {
-        String username=LoginRequest.getEmail();
+        System.out.println("Hola");
+        String email=LoginRequest.getEmail();
         String password=LoginRequest.getPassword();
 
-        Authentication authentication = authenticate(username, password);
+        Authentication authentication = authenticate(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         
         String jwt=JwtProvider.generateToken(authentication);
@@ -77,13 +78,13 @@ public class AuthController {
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
-    private Authentication authenticate(String username, String password){
-        UserDetails userDetails = customeUserDetails.loadUserByUsername(username);
+    private Authentication authenticate(String email, String password){
+        UserDetails userDetails = customeUserDetails.loadUserByUsername(email);
         if(userDetails==null){
-            throw new BadCredentialsException("invalid username");
+            throw new BadCredentialsException("invalid email");
         }
         if(!passwordEncoder.matches(password, userDetails.getPassword())){
-            throw new BadCredentialsException("invalid username");
+            throw new BadCredentialsException("invalid email");
         }
         return new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
     }

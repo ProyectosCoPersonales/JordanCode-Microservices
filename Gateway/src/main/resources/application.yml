@@ -2,23 +2,26 @@ server:
   port: 8090
 
 spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: UserService
+          uri: http://localhost:8080 
+          predicates:
+            - Path=/service/users/**
+
+        - id: ProductCatalogService
+          uri: http://localhost:8081  
+          predicates:
+            - Path=/products/**
   config:
-    import: optional:configserver:http://localhost:8080
+    import: optional:configserver:http://localhost:8888
   application:
     name: Gateway
 
-  cloud:
-    discovery:
-      locator:
-        enabled: true
-
-    gateway:
-      routes:
-        - id: UserService
-          uri: http://localhost:8080
-          predicates:
-            - Path=/api/users/**
-            
   datasource:
     url: jdbc:mysql://localhost:3306/microservice
     username: root
@@ -30,3 +33,9 @@ spring:
       ddl-auto: update
     show-sql: true
 
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

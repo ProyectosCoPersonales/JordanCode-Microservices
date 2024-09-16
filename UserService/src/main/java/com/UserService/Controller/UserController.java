@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.UserService.Service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/service/users")
 public class UserController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
-    @GetMapping("/UserInfo/{email}")
+    @GetMapping("/info/{email}")
     public ResponseEntity<?> getAllInformationByEmail(@PathVariable String email){
         return ResponseEntity.ok(userService.findUserByEmail(email));
     }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ShoppingCartService.dto.UserDTO;
 
-@FeignClient(name="UserService", url="localhost:8080/api/users")
+@FeignClient(name="UserService", url="localhost:8080/service/users")
 public interface UserClient {
     @GetMapping("/{id}")
     UserDTO getUserById(@PathVariable Long id);

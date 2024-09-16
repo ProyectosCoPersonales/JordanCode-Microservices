@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,8 @@ public class CartItem {
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
     private Long productId;
-    private Integer quantity;
-    private Double unitPrice;
+    @Default
+    private Integer quantity=0;
+    @Default
+    private Double unitPrice=0.0;
 }
