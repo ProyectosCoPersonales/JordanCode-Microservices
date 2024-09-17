@@ -40,9 +40,9 @@ public class OrderService {
         return orderRepository.findByUserEmail(email);
     }
 
-    public Order createOrder(String email, String username){
-        CartDTO cart = shoppingClient.sendCartData(username);
-        UserInfo user = userClient.getAllInformationByEmail(email);
+    public Order createOrder(Long idUser){
+        UserInfo user = userClient.getAllInformationById(idUser);
+        CartDTO cart = shoppingClient.sendCartData(user.getName());
         List<OrderItem> orderItems = cart.getCartItems().stream()
         .map(cartItem -> OrderItem.builder()
                 .productId(cartItem.getProductId())
@@ -54,8 +54,8 @@ public class OrderService {
         .collect(Collectors.toList());
         
         Order order = Order.builder()
-        .userName(username)
-        .userEmail(username)
+        .userName(user.getName())
+        .userEmail(user.getEmail())
         .userAddress(user.getAddress())
         .userPhone(user.getPhone())
         .items(orderItems)
@@ -83,6 +83,10 @@ public class OrderService {
         } else {
             throw new RuntimeException("Orden no encontrada con ID: " + orderId);
         }
+    }
+
+    public void DeleteOrder(Long orderId){
+        orderRepository.deleteById(orderId);
     }
     
 }

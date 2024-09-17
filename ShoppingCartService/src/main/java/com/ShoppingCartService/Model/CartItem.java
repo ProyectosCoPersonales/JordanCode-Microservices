@@ -1,5 +1,7 @@
 package com.ShoppingCartService.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,8 +27,10 @@ public class CartItem {
     private Long id; 
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonBackReference
     private Cart cart;
     private Long productId;
+    private String nameProduct;
     @Default
     private Integer quantity=0;
     @Default

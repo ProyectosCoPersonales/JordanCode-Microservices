@@ -1,41 +1,62 @@
+spring:
+  application:
+    name: Gateway
+  cloud:
+    gateway:
+      routes:
+        - id: Authentication
+          uri: lb://AUTHENTICATION
+          predicates:
+            - Path=/api/auth/**
+
+        - id: UserService
+          uri: lb://USERSERVICE
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - AuthenticationFilter
+
+        - id: ProductCatalogService
+          uri: lb://PRODUCTCATALOGSERVICE
+          predicates:
+            - Path=/api/products/**
+          filters:
+            - AuthenticationFilter
+
+        - id: ShoppingCartService
+          uri: lb://SHOPPINGCARTSERVICE
+          predicates:
+            - Path=/api/cart/**
+          filters:
+            - AuthenticationFilter
+
+        - id: OrderService
+          uri: lb://ORDERSERVICE
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - AuthenticationFilter
+
+        - id: PaymentServicePayPal
+          uri: lb://PAYMENTSERVICEPAYPAL
+          predicates:
+            - Path=/**
+          filters:
+            - AuthenticationFilter
+
+        - id: notification-service
+          uri: lb://NOTIFICATIONSERVICE
+          predicates:
+            - Path=/api/email/**
+          filters:
+            - AuthenticationFilter
+
 server:
   port: 8090
 
-spring:
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-      routes:
-        - id: UserService
-          uri: http://localhost:8080 
-          predicates:
-            - Path=/service/users/**
-
-        - id: ProductCatalogService
-          uri: http://localhost:8081  
-          predicates:
-            - Path=/products/**
-  config:
-    import: optional:configserver:http://localhost:8888
-  application:
-    name: Gateway
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/microservice
-    username: root
-    password: 4Sept2001System.in
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
 eureka:
-  instance:
-    hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

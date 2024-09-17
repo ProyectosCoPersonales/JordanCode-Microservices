@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.OrderService.dto.CartDTO;
 
-@FeignClient(name = "ShoppingCartService", url = "localhost:8082/cart")
+@FeignClient(name = "ShoppingCartService", url = "localhost:8090/api/cart")
 public interface ShoppingClient {
     @PostMapping("/{userName}")
     CartDTO sendCartData(@PathVariable String userName);

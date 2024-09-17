@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.UserService.Model.User;
 import com.UserService.Repository.UserRepository;
 import com.UserService.dto.UserOrderResponse;
+import com.UserService.dto.UserRequest;
 import com.UserService.dto.UserResponse;
 
 @Service
@@ -24,28 +25,28 @@ public class UserServiceImpl implements UserService {
                 .map(user -> UserResponse.builder()
                         .id(user.getId())
                         .name(user.getName())
+                        .email(user.getEmail())
                         .build())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public UserResponse findUserById(Long id) {
-        return userRepository.findById(id)
-                .map(user -> UserResponse.builder()
-                        .id(user.getId())
-                        .name(user.getName())
-                        .build())
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id)); 
-    }
-
-    @Override
-    public UserOrderResponse findUserByEmail(String Email) {
-        User user = userRepository.findByEmail(Email);
+    public UserOrderResponse findUserById(Long idUser) {
+        User user = userRepository.findById(idUser).orElseThrow();
         return UserOrderResponse.builder()
         .id(user.getId())
         .name(user.getName())
         .email(user.getEmail())
         .address(user.getAddress())
         .phone(user.getPhone()).build();
+    }
+
+    @Override
+    public User updateUser(Long idUser, UserRequest userRequest){
+        User user = userRepository.findById(idUser).orElseThrow();
+        user.setAddress(userRequest.getAddress());
+        user.setPhone(userRequest.getPhone());
+        userRepository.save(user);
+        return user;
     }
 }
