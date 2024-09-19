@@ -8,10 +8,10 @@
 		<version>3.3.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ShoppingCartService</groupId>
-	<artifactId>ShoppingCartService</artifactId>
+	<groupId>com.shoppingcartservice</groupId>
+	<artifactId>shoppingcartservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ShoppingCartService</name>
+	<name>shoppingcartservice</name>
 	<description>Manages user profiles and data</description>
 	<url/>
 	<licenses>
@@ -97,5 +97,4 @@
 			</plugin>
 		</plugins>
 	</build>
-		
 </project>

@@ -1,0 +1,183 @@
+version: "3.9" 
+
+services:
+
+  mysql:
+    image: mysql
+    container_name: mysql_docker
+    environment:
+      MYSQL_ROOT_PASSWORD: passwordroot
+      MYSQL_DATABASE: microservice
+      MYSQL_USER: usernormal
+      MYSQL_PASSWORD: passworduser
+    ports:
+      - "3307:3306"
+    networks:
+      - spring-network
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+  # Eureka Server para descubrimiento de microservicios
+  EurekaServer:
+    build:
+      context: ./EurekaServer
+      dockerfile: Dockerfile
+    container_name: EurekaServer
+    ports:
+      - "8761:8761"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+
+  # Servicio de Gateway
+  Gateway:
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    container_name: Gateway
+    ports:
+      - "8090:8090"
+    networks:
+      - spring-network
+    depends_on:
+      - EurekaServer
+      - mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+  # Servicio de Autenticación
+  Authentication:
+    build:
+      context: ./Authentication
+      dockerfile: Dockerfile
+    container_name: Authentication
+    ports:
+      - "8086:8086"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+      - EurekaServer
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql_docker:3306/microservice
+      DATABASE_USERNAME: usernormal
+      DATABASE_PASSWORD: passworduser
+
+  # Servicio de Notificaciones
+  NotificationService:
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    container_name: NotificationService
+    ports:
+      - "8085:8085"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+      - EurekaServer
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql_docker:3306/microservice
+      DATABASE_USERNAME: usernormal
+      DATABASE_PASSWORD: passworduser
+
+  # Servicio de Órdenes
+  OrderService:
+    build:
+      context: ./OrderService
+      dockerfile: Dockerfile
+    container_name: OrderService
+    ports:
+      - "8083:8083"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+      - EurekaServer
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql_docker:3306/microservice
+      DATABASE_USERNAME: usernormal
+      DATABASE_PASSWORD: passworduser
+
+  # Servicio de Pagos (PayPal)
+  PaymentServicePayPal:
+    build:
+      context: ./PaymentServicePayPal
+      dockerfile: Dockerfile
+    container_name: PaymentServicePayPal
+    ports:
+      - "8084:8084"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+      - EurekaServer
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql_docker:3306/microservice
+      DATABASE_USERNAME: usernormal
+      PAYPAL_CLIENT_ID: Ad6tVrpWb4AR7jFNkdHpP-MjaeGArleRxcbhcCU08CxrtE4-LSPsUftU2OzRSzYiDIo40K88EyJV56hV
+      PAYPAL_CLIENT_SECRET: EHKtAeuau0ADhQ-howMG6rY7RdamNwvM4oGlUtmKxA_jyL0Y__RQVRQN2CGbgo1-evmmzvsvOmsaQRBn
+      DATABASE_PASSWORD: passworduser
+
+
+  # Servicio del Catálogo de Productos
+  ProductCatalogService:
+    build:
+      context: ./ProductCatalogService
+      dockerfile: Dockerfile
+    container_name: ProductCatalogService
+    ports:
+      - "8081:8081"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+      - EurekaServer
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql_docker:3306/microservice
+      DATABASE_USERNAME: usernormal
+      DATABASE_PASSWORD: passworduser
+
+  # Servicio del Carrito de Compras
+  shoppingcartservice:
+    build:
+      context: ./shoppingcartservice
+      dockerfile: Dockerfile
+    container_name: shoppingcartservice
+    ports:
+      - "8082:8082"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+      - EurekaServer
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql_docker:3306/microservice
+      DATABASE_USERNAME: usernormal
+      DATABASE_PASSWORD: passworduser
+
+  # Servicio de Usuarios
+  userservice:
+    build:
+      context: ./userservice
+    container_name: userservice
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-network
+    depends_on:
+      - mysql
+      - EurekaServer
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql_docker:3306/microservice
+      DATABASE_USERNAME: usernormal
+      DATABASE_PASSWORD: passworduser
+    restart: always
+
+networks:
+  spring-network:
+    driver: bridge
+
+volumes:
+  mysql-volume:

@@ -4,52 +4,46 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: Authentication
-          uri: lb://AUTHENTICATION
+        - id: AuthenticationService
+          uri: lb://AuthenticationService
           predicates:
             - Path=/api/auth/**
 
-        - id: UserService
-          uri: lb://USERSERVICE
+        - id: userservice
+          uri: lb://userservice
           predicates:
             - Path=/api/users/**
           filters:
             - AuthenticationFilter
 
         - id: ProductCatalogService
-          uri: lb://PRODUCTCATALOGSERVICE
+          uri: lb://ProductCatalogService
           predicates:
             - Path=/api/products/**
           filters:
             - AuthenticationFilter
 
         - id: ShoppingCartService
-          uri: lb://SHOPPINGCARTSERVICE
+          uri: lb://ShoppingCartService
           predicates:
             - Path=/api/cart/**
           filters:
             - AuthenticationFilter
 
         - id: OrderService
-          uri: lb://ORDERSERVICE
+          uri: lb://OrderService
           predicates:
             - Path=/api/orders/**
-          filters:
-            - AuthenticationFilter
 
         - id: PaymentServicePayPal
-          uri: lb://PAYMENTSERVICEPAYPAL
+          uri: lb://PaymentServicePayPal
           predicates:
-            - Path=/**
-          filters:
-            - AuthenticationFilter
+            - Path=/api/payments/**
 
-        - id: notification-service
-          uri: lb://NOTIFICATIONSERVICE
+        - id: NotificationService
+          uri: lb://NotificationService
           predicates:
             - Path=/api/email/**
-          filters:
-            - AuthenticationFilter
 
 server:
   port: 8090
@@ -57,6 +51,6 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://EurekaServer:8761/eureka/
   instance:
     prefer-ip-address: true

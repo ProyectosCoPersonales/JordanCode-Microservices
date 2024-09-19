@@ -14,4 +14,8 @@ public class MessageService {
     public Message findMessagebyOrderId(Long OrderId){
         return messageRepository.findByOrderId(OrderId);
     }
+    public String deleteMessageById(Long id){
+        messageRepository.deleteById(id);
+        return "delete success";
+    }
 }

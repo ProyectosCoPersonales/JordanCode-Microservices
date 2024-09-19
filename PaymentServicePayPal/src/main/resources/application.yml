@@ -1,21 +1,21 @@
 spring:
   application:
     name: PaymentServicePayPal
-  config:
-    import: optional:configserver:http://localhost:8888
+
   datasource:
-    url: jdbc:mysql://localhost:3306/microservice
-    username: root
-    password: 4Sept2001System.in
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
 
 paypal:
-  client-id: Ad6tVrpWb4AR7jFNkdHpP-MjaeGArleRxcbhcCU08CxrtE4-LSPsUftU2OzRSzYiDIo40K88EyJV56hV
-  client-secret: EHKtAeuau0ADhQ-howMG6rY7RdamNwvM4oGlUtmKxA_jyL0Y__RQVRQN2CGbgo1-evmmzvsvOmsaQRBn
+  client-id: ${PAYPAL_CLIENT_ID}
+  client-secret: ${PAYPAL_CLIENT_SECRET}
   mode: sandbox
 
 server:
@@ -23,7 +23,7 @@ server:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: PaymentServicePayPal
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://EurekaServer:8761/eureka/

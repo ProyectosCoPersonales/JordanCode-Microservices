@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.PaymentServicePayPal.dto.OrderDTO;
 
-@FeignClient(name="OrderService", url="localhost:8090/api/orders")
-public interface OrderClient{
+@FeignClient(name="OrderService")
+public interface OrderClient {
 
-    @PostMapping("/bring/{orderId}")
-    OrderDTO BringOrder(@PathVariable Long orderId);
+    @PostMapping("/api/orders/bring/{orderId}")
+    OrderDTO bringOrder(@PathVariable Long orderId);
 
-    @PostMapping("/complete/{orderId}")
-    OrderDTO CompleteOrder(@PathVariable Long orderId);
+    @PostMapping("/api/orders/complete/{orderId}")
+    OrderDTO completeOrder(@PathVariable Long orderId);
 }
+

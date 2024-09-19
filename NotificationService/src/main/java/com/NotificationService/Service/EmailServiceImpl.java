@@ -93,7 +93,7 @@ public class EmailServiceImpl implements EmailService {
                 .replace("{orderStatus}", messageDTO.getOrderStatus())
                 .replace("{userAddress}", messageDTO.getUserAddress())
                 .replace("{userPhone}", messageDTO.getUserPhone());
-        sendOrderConfirmation(toEmail, subject, htmlMessage);
+        sendOrderConfirmation(messageDTO.getUserEmail(), subject, htmlMessage);
     }
 
     @Override

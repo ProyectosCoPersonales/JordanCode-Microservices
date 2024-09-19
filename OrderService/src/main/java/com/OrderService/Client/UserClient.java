@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.OrderService.dto.UserInfo;
 
-@FeignClient(name="UserService", url="localhost:8090/api/users")
+@FeignClient(name = "userservice")
 public interface UserClient {
-    @GetMapping("/info/{idUser}")
+    @GetMapping("/api/users/info/{idUser}")
     UserInfo getAllInformationById(@PathVariable Long idUser);
 }

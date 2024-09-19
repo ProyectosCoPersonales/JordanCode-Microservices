@@ -46,9 +46,9 @@ public class PaymentController {
             @RequestParam("currency") String currency,
             @RequestParam("description") String description) {
         try {
-            String  amounts = amount.replace(',', '.');
-            String cancelUrl = "http://localhost:8084/payment/cancel";
-            String successUrl = String.format("http://localhost:8084/payment/success/%d", orderId);
+            String amounts = amount.replace(',', '.');
+            String cancelUrl = "http://gateway-service/payment/cancel";
+            String successUrl = String.format("http://gateway-service/payment/success/%d", orderId);
             Payment payment = paymentService.createPayment(
                     orderId,
                     Double.valueOf(amounts),
@@ -72,19 +72,19 @@ public class PaymentController {
 
     @GetMapping("/payment/success/{orderId}")
     private String ViewSuccess(@PathVariable Long orderId, Model model,
-    @RequestParam("paymentId") String paymentId,
-    @RequestParam("PayerID") String payerId
-    ) {
+            @RequestParam("paymentId") String paymentId,
+            @RequestParam("PayerID") String payerId) {
         OrderDTO orderDTO = paymentService.ViewPaymentSuccess(orderId);
         model.addAttribute("order", orderDTO);
         messageRepository.save(Message.builder().orderId(orderId)
-        .userName(orderDTO.getUserName())
-        .userAddress(orderDTO.getUserAddress())
-        .userPhone(orderDTO.getUserPhone())
-        .orderStatus(orderDTO.getOrderStatus())
-        .orderDate(orderDTO.getOrderDate())
-        .totalAmount(orderDTO.getTotalAmount())
-        .build());
+                .userName(orderDTO.getUserName())
+                .userEmail(orderDTO.getUserEmail())
+                .userAddress(orderDTO.getUserAddress())
+                .userPhone(orderDTO.getUserPhone())
+                .orderStatus(orderDTO.getOrderStatus())
+                .orderDate(orderDTO.getOrderDate())
+                .totalAmount(orderDTO.getTotalAmount())
+                .build());
         try {
             Payment payment = paymentService.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
@@ -94,6 +94,7 @@ public class PaymentController {
             log.error("Error occurred:: ", e);
         }
         return "paymentSuccess";
-        
+
     }
+
 }

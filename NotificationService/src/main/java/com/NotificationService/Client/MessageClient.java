@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.NotificationService.dto.MessageDTO;
 
-@FeignClient(name ="PaymentServicePayPal" , url ="http://localhost:8090/api/messages")
+@FeignClient(name = "PaymentServicePayPal")
 public interface MessageClient {
-    @GetMapping("/{orderId}")
+    @GetMapping("/api/messages/{orderId}")
     MessageDTO GetMessageByOrderId(@PathVariable Long orderId);
 }

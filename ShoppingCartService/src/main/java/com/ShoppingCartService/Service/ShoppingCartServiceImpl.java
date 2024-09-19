@@ -52,7 +52,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         @Transactional
         @Override
         public CartResponse AddCartItem(Long idUser, Long idProduct, Integer quantity) {
-                UserDTO user = userClient.getUserById(idUser);
+                UserDTO user = userClient.getAllInformationById(idUser);
                 Cart cart = findCartByUser(user.getName());
                 if (cart == null) {
                         cart = Cart.builder()
@@ -106,7 +106,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         @Override
         public String RemoveCart(Long idUser) {
-                UserDTO user = userClient.getUserById(idUser);
+                UserDTO user = userClient.getAllInformationById(idUser);
                 Cart cart = findCartByUser(user.getName());
                 cartRepository.deleteById(cart.getId());
                 return "Delete success";
@@ -114,7 +114,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         @Override
         public CartResponse removeCartItem(Long idUser, Long idProduct) {
-                UserDTO user = userClient.getUserById(idUser);
+                UserDTO user = userClient.getAllInformationById(idUser);
                 Cart cart = findCartByUser(user.getName());
                 if (cart == null) {
                         throw new RuntimeException("No se encontró un carrito para el usuario: " + user.getName());

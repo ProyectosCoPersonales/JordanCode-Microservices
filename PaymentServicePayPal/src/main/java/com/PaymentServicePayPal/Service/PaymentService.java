@@ -19,9 +19,6 @@ import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.RequiredArgsConstructor;
 
-
-
-
 @RequiredArgsConstructor
 @Service
 public class PaymentService {
@@ -31,12 +28,12 @@ public class PaymentService {
     private OrderClient orderClient;
 
     public OrderDTO ViewOrderDetails(Long idOrder){
-        OrderDTO orderDTO = orderClient.BringOrder(idOrder);
+        OrderDTO orderDTO = orderClient.bringOrder(idOrder);
         return orderDTO;
     }
 
     public OrderDTO ViewPaymentSuccess(Long idOrder){
-        OrderDTO orderDTO = orderClient.CompleteOrder(idOrder);
+        OrderDTO orderDTO = orderClient.completeOrder(idOrder);
         return orderDTO;
     }
 
